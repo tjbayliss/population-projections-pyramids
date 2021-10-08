@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<!-- PYRAMID CHART -->
+
+<!--
+
+    USEFUL LINKS: 
+    https://developer.snapappointments.com/bootstrap-select/
+    https://stackoverflow.com/questions/1085801/get-selected-value-in-dropdown-list-using-javascript
+    https://stackoverflow.com/questions/27487937/selectpicker-with-select-all-by-default
+    https://developer.snapappointments.com/bootstrap-select/methods/
+    https://stackoverflow.com/questions/49801575/select-default-option-bootstrap-4
+    https://stackoverflow.com/questions/28349539/deselectall-doesnt-work-for-bootstrap-select
+    https://stackoverflow.com/questions/39973554/bootstrap-select-select-deselect-all-option-click-cant-firing-event
+
+    SVG range slider
+    https://codepen.io/osublake/pen/jbRaMY/
+-->
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <link rel="icon" href="https://alephinsights.com/wp-content/uploads/2019/05/favicon.icon" sizes="32x32" />
+  <link rel="icon" href="https://alephinsights.com/wp-content/uploads/2019/05/favicon.icon" sizes="192x192" />
+  <link rel="apple-touch-icon" href="https://alephinsights.com/wp-content/uploads/2019/05/favicon.icon" />
+
+  <title>Population Projection Pyramids</title>
+
+  <link rel="stylesheet" href="css/jquery-ui.css" />
+  <link rel="stylesheet" href="css/github.min.css" />
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/font-awesome.min.css" />
+  <link rel="stylesheet" href="css/aleph-global-colour-palettes.css" />
+  <link rel="stylesheet" href="css/bootstrap-select.min.css" />
+  <link rel="stylesheet" href="css/bootstrap-toggle.min.css" />
+  <link rel="stylesheet" href="css/dstl-global-colour-palettes.css" />
+  <link rel="stylesheet" href="css/aleph-futureForces-style.css" />
+</head>
+
+<body onload="onload()">
+  <div class="container-fluid">
+    <div class="row aleph-header-row">
+      <div class="col">
+        <div class="aleph-header"> <a class="nav-link" href="https://www.ableview.co.uk" target="_blank"><img
+              class="logo" src="image/ableview.svg"></a>
+          <h2 class="aleph-header-title">
+            Population Projection Pyramids
+          </h2>
+        </div>
+      </div>
+    </div>
+    <!-- END aleph-header-row -->
+
+    <div class="row aleph-visual-row">
+      <div class="col">
+        <div class="aleph-container">
+          <div class="div-container pyramid-chart">
+            <div class="aleph-form aleph-pyramid-form">
+              <div class="aleph-fieldset aleph-pyramid-fieldset">
+                <div class="aleph-pyramid-chart-buttons">
+                  <!-- START NEW CODE -->
+                  <button type="button" class="btn btn-secondary aleph-resetPyramids aleph-disabled" id="resetPyramids"
+                    value="resetPyramids" onclick="resetPyramids(this)" disabled>
+                    Reset Pyramids
+                  </button>
+                  <!-- END NEW CODE -->
+
+                  <label class="checkbox-inline checkbox-inline-playStop">
+                    <input type="checkbox" class="aleph-playStop" id="pyramid-playStop" data-off="Play" data-on="Stop"
+                      data-toggle="toggle" />
+                  </label>
+
+                  <label class="checkbox-inline checkbox-inline-freezeOutlines">
+                    <input type="checkbox" class="aleph-freezeOutlines" id="freezeOutlines" data-off="Lock Outlines"
+                      data-on="Unlock Outlines" data-toggle="toggle" />
+                  </label>
+
+                  <label class="checkbox-inline checkbox-inline-countsPercents">
+                    <input type="checkbox" class="aleph-countsPercents" id="countsPercents" data-off="Display Counts"
+                      data-on="Display Percentages" data-toggle="toggle" />
+                  </label>
+                </div>
+                <div class="pyramid-slider" id="pyramid-slider"></div>
+              </div>
+
+              <div class="row aleph-selector-row aleph-pyramid-selector-row">
+                <div class="aleph-pyramid-selector-container">
+                  <div class="aleph-pyramid-lists-container-left"></div>
+                  <div class="aleph-pyramid-lists-container-right"></div>
+
+                  <div class="
+                        aleph-pyramid-lists-container-selectionLabelling-left
+                      ">
+                    <div class="subContainer container-left-left">
+                      <label class="ethnicities-selections-left"></label>
+                    </div>
+                    <div class="subContainer container-left-right">
+                      <label class="regions-selections-left"></label>
+                    </div>
+                  </div>
+
+                  <div class="
+                        aleph-pyramid-lists-container-selectionLabelling-right
+                      ">
+                    <div class="subContainer container-right-left">
+                      <label class="ethnicities-selections-right"> </label>
+                    </div>
+                    <div class="subContainer container-right-right">
+                      <label class="regions-selections-right"> </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row aleph-warning-row aleph-pyramid-warning-row" id="aleph-pyramid-warning-row">
+                <div class="col col-sm-2"></div>
+                <div class="
+                      col col-sm-8
+                      alert alert-danger alert-dismissible
+                      pyramidChart
+                      incompleteSelections
+                      aleph-hide
+                    " style="height: 50px; background-color: none">
+                  <label class="aleph-alert-pyramid-incompleteSelections"><strong>Warning!</strong> Warning
+                    Message.</label>
+                </div>
+              </div>
+            </div>
+            <div class="aleph-chart-container aleph-pyramid-chart-container">
+              <svg class="aleph-chart aleph-pyramid-chart" id="aleph-pyramid-chart"></svg>
+            </div>
+          </div>
+        </div>
+        <!-- END aleph-container -->
+      </div>
+    </div>
+
+    <div class="row aleph-footer-row">
+      <div class="col">
+        <div class="aleph-footer">
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end container-fluid -->
+
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script>
+    window.jQuery ||
+      document.write(
+        '<script type="text/javascript" src="js/jquery-slim.min.js"><\/script>'
+      );
+  </script>
+
+  <!-- general library support files -->
+  <!-- THESE ONES ARE COMMON TO ALL CHART TYPES -->
+  <script type="text/javascript" src="js/jQuery-v3.6.0.js"></script>
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap-toggle.min.js"></script>
+  <script type="text/javascript" src="js/jquery-ui.js"></script>
+  <script type="text/javascript" src="js/d3.v5.min.js"></script>
+
+  <!-- Project-specific JS files -->
+  <!-- THESE ONES ARE COMMON TO ALL CHART TYPES -->
+  <script src="js/aleph-alephConstructObject-script.js"></script>
+  <script src="js/aleph-projectLoadFunctions-script.js"></script>
+  <script src="js/aleph-selectionConfigurations-script.js"></script>
+  <script src="js/aleph-windowResizeFunction-script.js"></script>
+  <script src="js/aleph-genericProjectFunctions-script.js"></script>
+
+  <!-- THESE ONES ARE SPECIFIC TO THE PYRAMID CHART -->
+  <script src="js/aleph-pyramidChart-script.js"></script>
+</body>
+
+</html>
